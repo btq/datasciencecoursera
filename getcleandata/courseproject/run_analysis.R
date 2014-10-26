@@ -1,4 +1,4 @@
-setwd('D:/GitHub/datasciencecoursera/getcleandata/courseproject')
+#setwd('D:/GitHub/datasciencecoursera/getcleandata/courseproject')
 library(reshape2)
 
 ### 1. Merge the training and the test sets to create one data set.
@@ -101,22 +101,11 @@ meltdf <- melt(meansd_dataset, id=c("subject", "activity"), measure.vars=measure
 tidy_dataset <- dcast(meltdf, subject + activity ~ ..., mean)
 for (nameId in seq_along(colnames(tidy_dataset))) {
   if (colnames(tidy_dataset)[nameId] != "subject" && colnames(tidy_dataset)[nameId] != "activity") {
-    # Prefix 'meanof' to the variable names.
-    colnames(tidy_dataset)[nameId] <- paste("meanof", colnames(tidy_dataset)[nameId], sep="")
-    # Use same precision as input for mean values.
+    colnames(tidy_dataset)[nameId] <- paste("mean_", colnames(tidy_dataset)[nameId], sep="")
+    # Use same precision as input
     tidy_dataset[,nameId] <- format(tidy_dataset[,nameId], scientific=TRUE)
   }
 }
 tidy_dataset <- tidy_dataset[order(tidy_dataset$subject, tidy_dataset$activity),]
 
-## Tidy Data:
-## 1. Each variable should be in one column.
-## 2. Each observation should in in one row.
-## 3. One table per "kind" of variable.
-## 4. Multiple tables should be linked by an one (or more) column(s).
-## Output of Tidy Data:
-## 1. Include a header with variable names.
-## 2. Make variable names human readable.
-## 3. One file per table.
-## --- USE 'write.table'
 write.table(tidy_dataset, "tidy_dataset.txt", quote=FALSE, sep="\t")
