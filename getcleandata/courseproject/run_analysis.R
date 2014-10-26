@@ -24,9 +24,11 @@ subjecttest$subject <- relevel(subjecttest$subject, 1)
 ytrain <- read.table("UCI HAR Dataset/train/y_train.txt", comment.char = c(""), colClasses=c("integer"), col.names = c("activity_id"))
 ## Read test labels
 ytest <- read.table("UCI HAR Dataset/test/y_test.txt", comment.char = c(""), colClasses=c("integer"), col.names = c("activity_id"))
+
 ## -- Read activity names
 activity_names <- read.table("UCI HAR Dataset/activity_labels.txt", comment.char = c(""), colClasses=c("integer", "factor"), col.names = c("activity_id", "activity"))
 activity_names$activity <- relevel(activity_names$activity, "WALKING")
+
 ## Merge activity names with train/test labels
 ytrain$rownum <- seq_len(nrow(ytrain))
 ytrain <- merge(ytrain, activity_names, by.x="activity_id", by.y="activity_id")
