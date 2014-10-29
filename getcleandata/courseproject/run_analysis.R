@@ -1,7 +1,7 @@
 #setwd('D:/GitHub/datasciencecoursera/getcleandata/courseproject')
 library(reshape2)
 
-### 1. Merge the training and the test sets to create one data set.
+### 1. Merges the training and the test sets to create one data set.
 ## Read features
 features <- read.table("UCI HAR Dataset/features.txt", comment.char = c(""), colClasses=c("numeric", "character"), col.names = c("featurenum", "featurename"))
 
@@ -25,7 +25,9 @@ ytrain <- read.table("UCI HAR Dataset/train/y_train.txt", comment.char = c(""), 
 ## Read test labels
 ytest <- read.table("UCI HAR Dataset/test/y_test.txt", comment.char = c(""), colClasses=c("integer"), col.names = c("activity_id"))
 
-## -- Read activity names
+
+## 3. Uses descriptive activity names to name the activities in the data set
+## Read activity names
 activity_names <- read.table("UCI HAR Dataset/activity_labels.txt", comment.char = c(""), colClasses=c("integer", "factor"), col.names = c("activity_id", "activity"))
 activity_names$activity <- relevel(activity_names$activity, "WALKING")
 
@@ -48,8 +50,8 @@ names(dataset) <- c(features$featurename, "subject", "activity")
 dataset$subject <- relevel(dataset$subject, 1)
 dataset$activity <- relevel(dataset$activity, "WALKING")
 
-
-## Compute mean and standard deviation for each of 66 measurements.
+## 2. Extracts only the measurements on the mean and standard deviation for each measurement.
+## Collect mean and standard deviation by pulling out feature names that contain mean and std
 meansd_dataset <- dataset[,c("tbodyaccelerationmeanx", "tbodyaccelerationstdx",
                              "tbodyaccelerationmeany", "tbodyaccelerationstdy",
                              "tbodyaccelerationmeanz", "tbodyaccelerationstdz",
@@ -85,6 +87,7 @@ meansd_dataset <- dataset[,c("tbodyaccelerationmeanx", "tbodyaccelerationstdx",
                              "fbodybodygyrojerkmagmean", "fbodybodygyrojerkmagstd",
                              "subject", "activity")]
 
+## 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 ## make a tidy dataset for each activity and each subject.
 tidy_dataset <- meansd_dataset
 for (nameId in seq_along(colnames(tidy_dataset))) {
